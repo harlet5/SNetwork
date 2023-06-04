@@ -38,17 +38,25 @@ func MakeNotifications(typ string, sender int, reciver int, gid int, gname strin
 		Gname:   gname,
 		Ename:   ename,
 	}
-	x, _ := db.GetSpecificNotification(nfc)
+	x, err := db.GetSpecificNotification(nfc)
+	log.Println("wut")
+	log.Println(x)
+	log.Println(err)
 	if !x {
+		log.Println("here")
 		err := db.CreateNotification(nfc)
 		if err != nil {
 			r.Errrr = "Notification make ERR"
 			conn.WriteJSON(r)
 		}
+		log.Println("hereagane")
+		log.Println(sender)
+		log.Println(reciver)
 		reply1 := Reply{"NfcSent", nfc}
 		reply2 := Reply{"NfcRecived", nfc}
 		reply4 := Reply{"NfcNew", nfc}
 		for _, oneConnection := range allConnections {
+			log.Println(oneConnection.Uid)
 			if oneConnection.Uid == sender {
 				oneConnection.Conn.WriteJSON(reply1)
 				oneConnection.Conn.WriteJSON(reply4)

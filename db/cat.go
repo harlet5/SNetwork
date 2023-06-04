@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"errors"
+	"log"
 )
 
 type Cat struct {
@@ -45,6 +46,7 @@ func GetCats() []Cat {
 func GetCatId(name string) (int, error) {
 	var id int
 	err := DB.QueryRow(`SELECT CId FROM Cats WHERE CName = ? `, name).Scan(&id)
+	log.Println("cat", err, name, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			DbErrHandler(false, "Cat get | query", err)

@@ -12,8 +12,10 @@ import (
 func MakeEvent(creator int, name string, description string, time string, gid int, conn *websocket.Conn, allConnections []USocket) {
 	r := EData{}
 	_, err := db.GetEventByNameInGroup(name, gid)
+	log.Println("here")
+	log.Println(err)
+	log.Println("here2")
 	if err != sql.ErrNoRows && err != nil {
-		log.Println(err)
 		r.Errrr = "EVENT make DB error"
 		conn.WriteJSON(r)
 	} else {
@@ -90,13 +92,17 @@ func MakeEvent(creator int, name string, description string, time string, gid in
 func SetEventStatus(uid int, eid int, gid int, status string, conn *websocket.Conn, allConnections []USocket) {
 	r := EData{}
 	x, _ := db.GetEventUserById(uid, eid)
+	log.Println(x)
 	if !x {
+		log.Println("first time")
 		err := db.AddUserEventConnection(uid, eid, status)
 		if err != nil {
 			r.Errrr = "EVENT set ERR"
 			conn.WriteJSON(r)
 		}
 	} else {
+		log.Println("second time")
+		log.Println(status)
 		err := db.UpdateUserEventConnection(uid, eid, status)
 		if err != nil {
 			r.Errrr = "EVENT set ERR"

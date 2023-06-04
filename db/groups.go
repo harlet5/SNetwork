@@ -120,6 +120,7 @@ func GetUserGroups(uid int) ([]Group, error) {
 	var ugs []Group
 	rows, err := DB.Query("SELECT * FROM groups WHERE id IN ( SELECT gid FROM usergroups WHERE uid = ?)", uid)
 	if err != nil {
+		log.Println("frick1")
 		return ugs, err
 	}
 	defer rows.Close()
@@ -128,6 +129,7 @@ func GetUserGroups(uid int) ([]Group, error) {
 		case nil:
 			ugs = append(ugs, ug)
 		default:
+			log.Println("frick1")
 			return ugs, err
 		}
 	}
@@ -139,6 +141,7 @@ func GetGroupUsers(gid int) ([]User, error) {
 	var ugs []User
 	rows, err := DB.Query("SELECT Users.UId, UFirst, ULast, UEmail, UAge, UGender, UName, UTime, UPic, UNick, UText FROM users WHERE Users.UId IN ( SELECT usergroups.uid FROM usergroups WHERE gid = ?)", gid)
 	if err != nil {
+		log.Println("frick2")
 		log.Println(err)
 		return ugs, err
 	}
@@ -148,6 +151,7 @@ func GetGroupUsers(gid int) ([]User, error) {
 		case nil:
 			ugs = append(ugs, user)
 		default:
+			log.Println("frick2")
 			return ugs, err
 		}
 	}
@@ -285,6 +289,7 @@ func GetInvited(gid int) ([]User, error) {
 	var ugs []User
 	rows, err := DB.Query("SELECT Users.UId, UFirst, ULast, UEmail, UAge, UGender, UName, UTime, UPic, UNick, UText FROM users WHERE Users.UId IN ( SELECT rid FROM groupinvs WHERE gid = ?)", gid)
 	if err != nil {
+		log.Println("frick3")
 		log.Println(err)
 		return ugs, err
 	}
@@ -294,6 +299,7 @@ func GetInvited(gid int) ([]User, error) {
 		case nil:
 			ugs = append(ugs, user)
 		default:
+			log.Println("frick3")
 			return ugs, err
 		}
 	}
@@ -306,6 +312,7 @@ func GetNotInvited(gid int) ([]User, error) {
 	rows, err := DB.Query("SELECT Users.UId, UFirst, ULast, UEmail, UAge, UGender, UName, UTime, UPic, UNick, UText FROM users WHERE Users.UId NOT IN ( SELECT rid FROM groupinvs WHERE gid = ? AND rid) AND Users.UId NOT IN ( SELECT usergroups.uid FROM usergroups WHERE gid = ?)", gid, gid)
 	if err != nil {
 		log.Println(err)
+		log.Println("frick4")
 		return ugs, err
 	}
 	defer rows.Close()
@@ -314,6 +321,7 @@ func GetNotInvited(gid int) ([]User, error) {
 		case nil:
 			ugs = append(ugs, user)
 		default:
+			log.Println("frick4")
 			return ugs, err
 		}
 	}

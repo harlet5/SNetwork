@@ -40,14 +40,20 @@ func scoreWithWebSocket(w http.ResponseWriter, r *http.Request) {
 		for {
 			mType, msg, err := conn.ReadMessage()
 			if err != nil || mType == 8 {
+				log.Println("hereeeeee")
 				spooderMan = backend.DeleteConn(conn, spooderMan)
 				conn.Close()
 				return
 			}
+			log.Println("spooderman: ", spooderMan)
 			in := backend.Data{}
 			out := backend.EData{}
 			json.Unmarshal(msg, &in)
+			log.Println("there")
+			log.Println(in)
 			if !backend.CheckSess(int(in.Session["userid"].(float64)), in.Session["sessionid"].(string)) {
+				log.Println("checked logout")
+				log.Println(int(in.Session["userid"].(float64)), in.Session["sessionid"].(string))
 				spooderMan = backend.DeleteConn(conn, spooderMan)
 				backend.Logout(int(in.Session["userid"].(float64)), conn, spooderMan)
 			} else {
@@ -102,6 +108,7 @@ func scoreWithWebSocket(w http.ResponseWriter, r *http.Request) {
 				case "logout":
 					backend.Logout(int(in.Act.Data["cid"].(float64)), conn, spooderMan)
 				case "signup":
+					log.Println("here")
 					spooderMan = backend.SignUp(in.Act.Data["ufname"].(string), in.Act.Data["ulname"].(string), in.Act.Data["uage"].(string), in.Act.Data["ugender"].(string), in.Act.Data["uname"].(string), in.Act.Data["upass"].(string), in.Act.Data["umail"].(string), in.Act.Data["upic"].(string), in.Act.Data["unickname"].(string), in.Act.Data["uaboutme"].(string), conn, spooderMan)
 				case "groups":
 					backend.ShowGroups(int(in.Act.Data["uid"].(float64)), conn)
@@ -166,8 +173,8 @@ func init() {
 		if err := db.Migrate(); err != nil {
 			log.Fatal(err)
 		}
-		db.DbUtil()
-		db.FillTables()
+    db.DbUtil()
+    db.FillTables()
 	}
 
 	// if *populatePtr {

@@ -47,6 +47,7 @@ func GetFollowers(rid int) ([]User, error) {
 		var user User
 		if err := rows.Scan(&user.UId, &user.UFirst, &user.ULast, &user.UEmail, &user.UAge, &user.UGender, &user.UName, &user.UTime, &user.UPic, &user.UNick, &user.UText); err != nil {
 			log.Println(err)
+			log.Println("what2")
 			DbErrHandler(false, "Followers get | scan", err)
 			return users, err
 		}
@@ -63,6 +64,7 @@ func GetFollowed(sid int) ([]User, error) {
 		var user User
 		if err := rows.Scan(&user.UId, &user.UFirst, &user.ULast, &user.UEmail, &user.UAge, &user.UGender, &user.UName, &user.UTime, &user.UPic, &user.UNick, &user.UText); err != nil {
 			log.Println(err)
+			log.Println("what3")
 			DbErrHandler(false, "Followed get | scan", err)
 			return users, err
 		}
@@ -77,14 +79,17 @@ func CreateFollowRequest(follow Follow) error {
 		return nil
 	}
 	insertSQL := `INSERT INTO followrequests(follower, followee) VALUES (?, ?)`
+	log.Println("creating")
 	statement, err := DB.Prepare(insertSQL)
 	if err != nil {
 		log.Println(err)
+		log.Println("what4")
 		return err
 	}
 	_, err = statement.Exec(follow.Sid, follow.Rid)
 	if err != nil {
 		log.Println(err)
+		log.Println("what5")
 		return err
 	}
 	return nil

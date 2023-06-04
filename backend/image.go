@@ -6,6 +6,7 @@ import (
 	"image/gif"
 	"image/jpeg"
 	"image/png"
+	"log"
 	"os"
 	"real-time-forum/db"
 	"strconv"
@@ -29,12 +30,15 @@ func ProfPic(pic string, id int, act string, count string, conn *websocket.Conn)
 	}
 	switch typ {
 	case "image/png":
+		log.Println("png")
 		img, _ := png.Decode(reader)
 		saveToPNG(img, name)
 	case "image/jpeg":
+		log.Println("jpeg")
 		img, _ := jpeg.Decode(reader)
 		saveToJPEG(img, name)
 	case "image/gif":
+		log.Println("gif")
 		img, _ := gif.Decode(reader)
 		saveToGIF(img, name)
 	}

@@ -1,5 +1,7 @@
 package db
 
+import "log"
+
 type Notification struct {
 	Sender  int
 	Reciver int
@@ -14,7 +16,9 @@ type Notification struct {
 
 func CreateNotification(nfc Notification) error {
 	x, _ := GetSpecificNotification(nfc)
+	log.Println("hmmm")
 	if x {
+		log.Println("hmmm2")
 		return nil
 	}
 	insertSQL := `INSERT INTO notifications(type, sender, reciver, status, gid, gname, ename) VALUES (?, ?, ?, ?, ?, ?, ?)`
