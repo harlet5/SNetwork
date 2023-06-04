@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"log"
 	"real-time-forum/db"
 
 	"github.com/gorilla/websocket"
@@ -38,16 +37,11 @@ type Reply struct {
 }
 
 func UpdateConnections(id int, oper string, conn *websocket.Conn, cons []USocket) []USocket {
-	log.Println("frick")
 	if !containscon(cons, conn) {
-		log.Println("frick1")
 		cons = append(cons, USocket{Conn: conn, Uid: id})
 	} else if oper == "login" {
 		for i, con := range cons {
 			if con.Conn == conn {
-				log.Println("frick2")
-				log.Println("why are you not here1")
-				log.Println(con.Uid)
 				cons[i].Uid = id
 				return cons
 			}
@@ -55,8 +49,6 @@ func UpdateConnections(id int, oper string, conn *websocket.Conn, cons []USocket
 	} else {
 		for i, con := range cons {
 			if con.Uid == id {
-				log.Println("frick3")
-				log.Println("why are you not here2")
 				cons[i].Uid = 0
 				return cons
 			}
@@ -69,7 +61,6 @@ func DeleteConn(conn *websocket.Conn, cons []USocket) []USocket {
 	if containscon(cons, conn) {
 		for i, v := range cons {
 			if v.Conn == conn {
-				log.Println("should")
 				ret := make([]USocket, 0)
 				ret = append(ret, cons[:i]...)
 				return append(ret, cons[i+1:]...)
@@ -80,9 +71,7 @@ func DeleteConn(conn *websocket.Conn, cons []USocket) []USocket {
 }
 
 func CheckSess(uid int, sid string) bool {
-	log.Println("checking")
 	if sid == "" {
-		log.Println("checking")
 		return true
 	}
 	db.DelExpired(uid, sid)
@@ -97,7 +86,6 @@ func CheckSess(uid int, sid string) bool {
 func containscon(s []USocket, conn *websocket.Conn) bool {
 	for _, v := range s {
 		if v.Conn == conn {
-			log.Println("why tho")
 			return true
 		}
 	}

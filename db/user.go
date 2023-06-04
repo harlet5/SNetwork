@@ -163,7 +163,6 @@ func GetUname(uid int) (string, error) {
 func CreateUser(user User) error {
 	stm, err := DB.Prepare(`INSERT INTO Users (UFirst, ULast, UEmail, UAge, UGender, UName, UPass, UTime, UPic, UNick, UText, UPriv) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`)
 	log.Println(err)
-	log.Println("whomstedve")
 	if err != nil {
 		DbErrHandler(false, "User create | prepare", err)
 		return err

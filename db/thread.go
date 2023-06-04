@@ -39,7 +39,6 @@ func GetThread(id string) Thread {
 		u, err := GetUser(thread.TUId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frick3")
 			return thread
 		}
 		thread.TUName = u.UName
@@ -78,7 +77,6 @@ func GetThreads(uname string) ([]Thread, error) {
 	rows, err := DB.Query("SELECT * FROM Threads WHERE TGId = ? AND TUId = ? OR TPriv = 'Public' OR (TPriv = 'Private' AND ? IN (SELECT follower FROM followers WHERE followee = TUId)) OR (TPriv = 'Almost private' AND TId IN (SELECT tid FROM threadviewers))", -1, u.UId, u.UId)
 	if err != nil {
 		log.Println(err)
-		log.Println("frickius1")
 		if !errors.Is(err, sql.ErrNoRows) {
 			DbErrHandler(false, "Threads get | query", err)
 		}
@@ -92,14 +90,12 @@ func GetThreads(uname string) ([]Thread, error) {
 				DbErrHandler(false, "Threads get | scan", err)
 			}
 			log.Println(err)
-			log.Println("frickius2")
 			return threads, err
 		}
 		topic_id := strconv.Itoa(thread.TId)
 		u, err := GetUser(thread.TUId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius3")
 			return threads, err
 		}
 		thread.TUName = u.UName
@@ -107,19 +103,16 @@ func GetThreads(uname string) ([]Thread, error) {
 		thread.TCats, err = GetCatByThread(topic_id)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius4")
 			return threads, err
 		}
 		thread.TPics, err = GetThreadPics(thread.TId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius5")
 			return threads, err
 		}
 		thread.TWho, err = GetThreadUsers(thread.TUId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius6")
 			return threads, err
 		}
 		threads = append(threads, thread)
@@ -128,14 +121,12 @@ func GetThreads(uname string) ([]Thread, error) {
 }
 
 func CreateThread(t Thread) error {
-	log.Println(t)
 	query := "INSERT INTO Threads (TBody, TUId, TTime, TGId, TPriv) VALUES (?,?,?,?,?) RETURNING TId"
 	if err := DB.QueryRow(query, t.TBody, t.TUId, t.TTime, t.TGid, t.TPriv).Scan(&t.TId); err != nil {
 		log.Println(err)
 		DbErrHandler(false, "Thread create | query", err)
 		return err
 	}
-	log.Println("here")
 	return nil
 }
 
@@ -161,7 +152,6 @@ func GetThreadsByCat(cid int) ([]Thread, error) {
 		u, err := GetUser(thread.TUId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius7")
 			return threads, err
 		}
 		thread.TUName = u.UName
@@ -199,7 +189,6 @@ func GetThreadsByUser(id int) ([]Thread, error) {
 		u, err := GetUser(thread.TUId)
 		if err != nil {
 			log.Println(err)
-			log.Println("frickius8")
 			return threads, err
 		}
 		thread.TUName = u.UName
@@ -227,7 +216,6 @@ func GetThreadsInGroup(gid int) ([]Thread, error) {
 			u, err := GetUser(thread.TUId)
 			if err != nil {
 				log.Println(err)
-				log.Println("frickius9")
 				return threads, err
 			}
 			thread.TUName = u.UName
@@ -282,7 +270,6 @@ func GetThreadPics(tid int) ([]string, error) {
 	var pic string
 	rows, err := DB.Query("SELECT name FROM threadpics WHERE tid = ?", tid)
 	if err != nil {
-		log.Println("fuck")
 		return pics, err
 	}
 	defer rows.Close()
@@ -294,7 +281,6 @@ func GetThreadPics(tid int) ([]string, error) {
 			r++
 			pics = append(pics, pic)
 		default:
-			log.Println("YOU")
 			return pics, err
 		}
 	}

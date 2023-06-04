@@ -2,7 +2,6 @@ package backend
 
 import (
 	"database/sql"
-	"log"
 	"real-time-forum/db"
 	"strconv"
 
@@ -146,7 +145,6 @@ func ShowOneGroup(userId int, gid int, count int, conn *websocket.Conn, allConne
 		conn.WriteJSON(r)
 	}
 	u.UPass = ""
-	log.Println(g.Id)
 	e, err := db.GetEventsByGroup(g.Id)
 	if err != nil && err != sql.ErrNoRows {
 		r.Errrr = "Group show ERR 1"

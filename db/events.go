@@ -64,7 +64,6 @@ func GetEventsByGroup(gid int) ([]Event, error) {
 	tmp, _ := GetGroupUsers(gid)
 	if err != nil {
 		log.Println(err)
-		log.Println("why1")
 		return events, err
 	}
 	defer rows.Close()
@@ -82,7 +81,6 @@ func GetEventsByGroup(gid int) ([]Event, error) {
 			events = append(events, event)
 		default:
 			log.Println(err)
-			log.Println("why2")
 			return events, err
 		}
 	}
@@ -154,7 +152,6 @@ func GetEventUsers(eid int, status string) ([]User, error) {
 	rows, err := DB.Query(`SELECT Users.UId, UFirst, ULast, UEmail, UAge, UGender, UName, UTime, UPic, UNick, UText FROM Users INNER JOIN userevents WHERE eid = ? AND userevents.uid = Users.UId AND status = ?`, eid, status)
 	if err != nil {
 		log.Println(err)
-		log.Println("wh31")
 		return users, err
 	}
 	defer rows.Close()
@@ -178,7 +175,6 @@ func GetEventUserById(uid int, eid int) (bool, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		log.Println("here")
 		return true, nil
 	}
 	return false, nil
@@ -190,7 +186,6 @@ func GetUserEvents(uid int) ([]UserEvent, error) {
 	rows, err := DB.Query("SELECT * FROM userevents WHERE uid = ? ", uid)
 	if err != nil {
 		log.Println(err)
-		log.Println("wh32")
 		return ues, err
 	}
 	defer rows.Close()

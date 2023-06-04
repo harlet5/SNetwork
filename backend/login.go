@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"log"
 	"real-time-forum/db"
 	"time"
 
@@ -31,13 +30,10 @@ type UData struct {
 }
 
 func LogIn(uname string, upass string, conn *websocket.Conn, spooderman []USocket) []USocket {
-	log.Println(spooderman)
 	r := EData{}
-	log.Println(uname)
 	uid, err := db.GetUId(uname)
 	if uid == 0 {
 		uid, err = db.GetUIdByEmail(uname)
-		log.Println(uid)
 	}
 	if err != nil {
 		r.Errrr = "DB error for email/usernam"
@@ -107,7 +103,6 @@ func LogIn(uname string, upass string, conn *websocket.Conn, spooderman []USocke
 			conn.WriteJSON(r)
 		}
 	}
-	log.Println(spooderman)
 	return spooderman
 }
 
@@ -123,7 +118,6 @@ func Logout(id int, conn *websocket.Conn, spooderman []USocket) {
 }
 
 func SignUp(ufirst string, ulast string, uage string, ugender string, uname string, upass string, uemail string, upic string, unick string, utext string, conn *websocket.Conn, spooderman []USocket) []USocket {
-	log.Println(spooderman)
 	r := EData{}
 	uid, err := db.GetUId(uname)
 	uid2, errr := db.GetUIdByEmail(uemail)
@@ -153,7 +147,6 @@ func SignUp(ufirst string, ulast string, uage string, ugender string, uname stri
 				r.Errrr = "Session error"
 				conn.WriteJSON(r)
 			} else {
-				log.Println("hi")
 				u, _ := db.GetUserByUname(uname)
 				if upic != "" {
 					ProfPic(upic, u.UId, "profile_", "", conn)
@@ -166,6 +159,5 @@ func SignUp(ufirst string, ulast string, uage string, ugender string, uname stri
 			}
 		}
 	}
-	log.Println(spooderman)
 	return spooderman
 }

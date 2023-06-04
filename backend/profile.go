@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"log"
 	"real-time-forum/db"
 
 	"github.com/gorilla/websocket"
@@ -30,7 +29,6 @@ func ShowProfile(userId int, viewedId int, conn *websocket.Conn) {
 		conn.WriteJSON(r)
 	}
 	fstatus, err := db.CheckFollowStatus(userId, viewedId)
-	log.Println(fstatus)
 	if err != nil {
 		r.Errrr = "FOLLOWREQ error"
 		conn.WriteJSON(r)
@@ -84,7 +82,6 @@ func SetPrivateProfile(userId int, conn *websocket.Conn) {
 	userInfo := UData{}
 	switch user.UPriv {
 	case "false":
-		log.Println(user.UPriv)
 		err = db.UpdPrivacy(userId, "true")
 		if err != nil {
 			r.Errrr = "Profile ERR"
@@ -95,10 +92,8 @@ func SetPrivateProfile(userId int, conn *websocket.Conn) {
 			r.Errrr = "Profile ERR"
 			conn.WriteJSON(r)
 		}
-		log.Println(user.UPriv)
 		userInfo = UData{user.UName, user.UId, user.UEmail, user.UTime, posts, user.UFirst, user.ULast, user.UAge, user.UGender, user.UPic, user.UNick, user.UText, follow, req, true, true, false}
 	default:
-		log.Println(user.UPriv)
 		err = db.UpdPrivacy(userId, "false")
 		if err != nil {
 			r.Errrr = "Profile ERR"
@@ -109,7 +104,6 @@ func SetPrivateProfile(userId int, conn *websocket.Conn) {
 			r.Errrr = "Profile ERR"
 			conn.WriteJSON(r)
 		}
-		log.Println(user.UPriv)
 		userInfo = UData{user.UName, user.UId, user.UEmail, user.UTime, posts, user.UFirst, user.ULast, user.UAge, user.UGender, user.UPic, user.UNick, user.UText, follow, req, true, false, false}
 	}
 	reply := Reply{"front", userInfo}
